@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: project-02
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k8s-worker-1
+      containers:
+      - name: frontend
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: BACKEND_URL
+          value: "http://backend-svc"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
